@@ -1,5 +1,3 @@
-from datetime import datetime
-
 import jwt
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -38,13 +36,12 @@ class AuthBackend(authentication.BaseAuthentication):
         try:
             payload = jwt.decode(token, settings.SECRET_KEY,
                                  algorithms=settings.ALGORITHM)
-        except jwt.PyJWTError:
+        except jwt.PyJWTError as ex:
+            if str(ex) == 'Signature has expired':
+                raise exceptions.AuthenticationFailed(
+                    'Signature has expired')
             raise exceptions.AuthenticationFailed(
                 'Invalid auth. Can not decode token.')
-
-        token_exp = datetime.fromtimestamp(payload['exp'])
-        if token_exp < datetime.utcnow():
-            raise exceptions.AuthenticationFailed('Token expired.')
 
         try:
             user = User.objects.get(id=payload['user_id'])
