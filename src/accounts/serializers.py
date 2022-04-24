@@ -27,7 +27,9 @@ class ProfileSerializer(serializers.ModelSerializer):
 
     username = serializers.CharField(source='user.username', read_only=True)
     email = serializers.EmailField(source='user.email', read_only=True)
+    join_date = serializers.DateTimeField(read_only=True)
 
     class Meta:
         model = models.Profile
-        fields = ('username', 'email', 'country', 'city', 'biography',)
+        fields = ('username', 'email', 'country', 'city', 'biography',
+                  'join_date')
