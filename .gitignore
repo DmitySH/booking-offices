@@ -17,11 +17,11 @@ __pycache__/
 *.py[cod]
 .pyc
 *.pyc
-**/secrets.py
+**/secrets.*
 
 media/*
 !*media/.gitkeep
-
+**/migrations
 
 log/debug.log
 
