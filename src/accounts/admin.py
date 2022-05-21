@@ -1,8 +1,14 @@
 from django.contrib import admin
 
-from . import models
+from .forms import ProfileCreationForm, ProfileChangeForm
+from .models import Profile
 
 
-@admin.register(models.Profile)
+@admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
-    pass
+    ordering = ['-id']
+    add_form = ProfileCreationForm
+    form = ProfileChangeForm
+    model = Profile
+    readonly_fields = ('password', 'email', 'join_date', 'last_login')
+    exclude = ('password',)

@@ -14,7 +14,7 @@ class TokenAuthenticateSerializer(serializers.Serializer):
     def create(self, validated_data):
         pass
 
-    username = serializers.CharField()
+    email = serializers.EmailField()
     password = serializers.CharField(
         style={'input_type': 'password'}
     )
@@ -25,11 +25,11 @@ class ProfileSerializer(serializers.ModelSerializer):
     Serializes authorized user's profile.
     """
 
-    username = serializers.CharField(source='user.username', read_only=True)
-    email = serializers.EmailField(source='user.email', read_only=True)
+    email = serializers.EmailField(read_only=True)
     join_date = serializers.DateTimeField(read_only=True)
 
     class Meta:
         model = models.Profile
-        fields = ('username', 'email', 'country', 'city', 'biography',
-                  'join_date')
+        fields = (
+            'email', 'first_name', 'last_name', 'country', 'city', 'biography',
+            'join_date')

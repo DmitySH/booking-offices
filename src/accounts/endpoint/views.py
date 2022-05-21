@@ -12,7 +12,7 @@ class UserView(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        return self.request.user.profile
+        return self.request.user
 
     def get_object(self):
         return self.get_queryset()
