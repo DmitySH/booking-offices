@@ -1,0 +1,18 @@
+{% block subject %}
+    Account activation on {{ site_name }}
+{% endblock subject %}
+
+{% block text_body %}
+    You're receiving this email because you need to finish activation process
+    on {{ site_name }}.
+
+    Please go to the following page to activate account:
+    {% if request.is_secure %}
+        https://
+        {{ request.get_host }}{% url 'activation' uid=uid token=token %}
+    {% else %}
+        http://{{ request.get_host }}{% url 'activation' uid=uid token=token %}
+    {% endif %}
+
+    Thanks for using our site!
+{% endblock text_body %}

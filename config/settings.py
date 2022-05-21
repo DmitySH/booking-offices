@@ -96,6 +96,9 @@ AUTH_PASSWORD_VALIDATORS = [
 
 AUTH_USER_MODEL = 'accounts.Profile'
 
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.AllowAllUsersModelBackend']
+
 # Internationalization
 
 LANGUAGE_CODE = 'ru-RU'
@@ -135,5 +138,19 @@ SWAGGER_SETTINGS = {
             'name': 'Authorization',
             'in': 'header'
         }
+    }
+}
+
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = secret.EMAIL
+EMAIL_HOST_PASSWORD = secret.EMAIL_PASSWORD
+EMAIL_PORT = 587
+
+DJOSER = {
+    'ACTIVATION_URL': 'api/v1/auth/activate/{uid}/{token}',
+    'SEND_ACTIVATION_EMAIL': True,
+    'EMAIL': {
+        'activation': 'src.accounts.endpoint.auth_views.ActivationEmail'
     }
 }
