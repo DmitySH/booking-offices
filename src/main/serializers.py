@@ -4,6 +4,16 @@ from src.general.models import Country, City
 from src.main import models
 
 
+class OfficePhotoSerializer(serializers.ModelSerializer):
+    """
+    Serializes photo of office.
+    """
+
+    class Meta:
+        model = models.OfficePhoto
+        fields = '__all__'
+
+
 class OfficeSerializer(serializers.ModelSerializer):
     """
     Serializes office.
