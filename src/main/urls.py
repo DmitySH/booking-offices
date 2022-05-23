@@ -12,4 +12,6 @@ urlpatterns = [
          views.OfficePhotoView.as_view({'post': 'create'})),
     path('office/<int:office_id>/photos/',
          views.OfficePhotoView.as_view({'get': 'list'})),
+    path('office/photos/<int:photo_id>/',
+         views.OfficePhotoView.as_view({'delete': 'destroy'})),
 ]
