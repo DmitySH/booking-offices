@@ -40,7 +40,7 @@ class Profile(AbstractUser):
     biography = models.TextField(verbose_name='Биография',
                                  max_length=2000, blank=True, default='')
     photo = models.ImageField('Фотография',
-                              upload_to='media/profile-office-photos/',
+                              upload_to='profile-office-photos/',
                               null=True, blank=True)
 
     def __str__(self):

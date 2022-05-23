@@ -31,7 +31,7 @@ class Office(models.Model):
 
 class OfficePhoto(models.Model):
     text = models.CharField('Описание фотографии', max_length=255)
-    photo = models.ImageField('Фотография', upload_to='media/office-photos/')
+    photo = models.ImageField('Фотография', upload_to='office-photos/')
     office = models.ForeignKey(Office, on_delete=models.CASCADE,
                                verbose_name='Кабинет', related_name='photos')
 
