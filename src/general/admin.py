@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from src.general.models import Country, City, RatingStar
+from src.general.models import Country, City
 
 
 @admin.register(Country)
@@ -10,9 +10,4 @@ class CountryAdmin(admin.ModelAdmin):
 
 @admin.register(City)
 class CityAdmin(admin.ModelAdmin):
-    pass
-
-
-@admin.register(RatingStar)
-class RatingStarAdmin(admin.ModelAdmin):
     pass

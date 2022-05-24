@@ -1,4 +1,4 @@
-from django.core.validators import MaxValueValidator
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
 import src.general.models as general_models
@@ -51,11 +51,10 @@ class OfficeReview(models.Model):
                                 verbose_name='Аккаунт',
                                 related_name='sent_reviews')
     text = models.TextField('Текст отзыва', max_length=2000)
-    ip = models.CharField('IP адрес', max_length=15)
-    star = models.ForeignKey(general_models.RatingStar,
-                             on_delete=models.CASCADE,
-                             verbose_name='Звезда рейтинга',
-                             related_name='ratings')
+    rating = models.PositiveSmallIntegerField('Оценка',
+                                              validators=[MinValueValidator(1),
+                                                          MaxValueValidator(
+                                                              5)])
     created_at = models.DateTimeField('Дата создания', auto_now_add=True)
 
     def __str__(self):
