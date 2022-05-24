@@ -7,7 +7,8 @@ urlpatterns = [
          views.OfficeView.as_view(
              {'get': 'list', 'post': 'create'})),
     path('office/<int:pk>/',
-         views.OfficeView.as_view({'get': 'retrieve', 'put': 'update'})),
+         views.OfficeView.as_view(
+             {'get': 'retrieve', 'put': 'update', 'delete': 'destroy'})),
     path('office/photo/',
          views.OfficePhotoView.as_view({'post': 'create'})),
     path('office/<int:office_id>/photos/',
