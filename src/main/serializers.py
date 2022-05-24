@@ -48,3 +48,13 @@ class OfficeSerializer(serializers.ModelSerializer):
         instance.city = validated_data.pop('city')
 
         return super().update(instance, validated_data)
+
+
+class OfficeReviewSerializer(serializers.ModelSerializer):
+    """
+    Serializes review about office.
+    """
+
+    class Meta:
+        model = models.OfficeReview
+        exclude = ('profile',)
