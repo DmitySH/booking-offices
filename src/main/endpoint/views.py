@@ -4,6 +4,7 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 from src.main import serializers
+from src.main.exceptions import IncorrectMethod
 from src.main.models import Office, OfficePhoto, OfficeReview
 from src.main.permissions import IsModeratorOrReadOnly
 
@@ -21,12 +22,17 @@ class OfficeReviewView(viewsets.ModelViewSet):
         return OfficeReview.objects.filter(office=office_id)
 
     def perform_create(self, serializer):
-        OfficeReview.objects.update_or_create(
-            profile=self.request.user,
-            office=serializer.validated_data['office'],
-            defaults={'text': serializer.validated_data['text'],
-                      'rating': serializer.validated_data['rating']}
-        )
+        if OfficeReview.objects.filter(profile=self.request.user,
+                                       office=serializer.validated_data[
+                                           'office']).exists():
+            raise IncorrectMethod(
+                detail='Use PUT method to edit existing review')
+        serializer.save(profile=self.request.user)
+
+    def perform_update(self, serializer):
+        # Ignore office to update, because it was defined in URL.
+        serializer.validated_data.pop('office')
+        serializer.save()
 
 
 class OfficePhotoView(viewsets.ModelViewSet):

@@ -20,5 +20,6 @@ urlpatterns = [
     path('office/<int:office_id>/reviews/',
          views.OfficeReviewView.as_view({'get': 'list'})),
     path('office/reviews/<int:review_id>/',
-         views.OfficeReviewView.as_view({'delete': 'destroy'})),
+         views.OfficeReviewView.as_view(
+             {'delete': 'destroy', 'put': 'update'})),
 ]
