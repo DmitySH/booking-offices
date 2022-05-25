@@ -20,6 +20,11 @@ urlpatterns = [
     path('office/<int:office_id>/reviews/',
          views.OfficeReviewView.as_view({'get': 'list'})),
     path('office/reviews/<int:review_id>/',
-         views.OfficeReviewView.as_view(
-             {'delete': 'destroy'})),
+         views.OfficeReviewView.as_view({'delete': 'destroy'})),
+    path('office/reservation/',
+         views.ReservationView.as_view({'post': 'create'})),
+    path('office/<int:office_id>/reservations/',
+         views.ReservationView.as_view({'get': 'list'})),
+    path('office/reservations/<int:reservation_id>/',
+         views.ReservationView.as_view({'delete': 'destroy'})),
 ]

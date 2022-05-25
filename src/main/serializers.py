@@ -58,3 +58,20 @@ class OfficeReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.OfficeReview
         exclude = ('profile',)
+
+
+class ReservationSerializer(serializers.ModelSerializer):
+    """
+    Serializes reservation of an office.
+    """
+
+    def validate(self, attrs):
+        if attrs['start'] >= attrs['end']:
+            raise serializers.ValidationError(
+                'End time must be greater than start time')
+
+        return super().validate(attrs)
+
+    class Meta:
+        model = models.Reservation
+        exclude = ('profile',)

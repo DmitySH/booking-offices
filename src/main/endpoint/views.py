@@ -5,8 +5,8 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 
 from src.main import serializers
-from src.main.exceptions import IncorrectMethod
-from src.main.models import Office, OfficePhoto, OfficeReview
+from src.main.exceptions import IncorrectMethod, BadOperation
+from src.main.models import Office, OfficePhoto, OfficeReview, Reservation
 from src.main.permissions import IsModeratorOrReadOnly
 
 
@@ -78,3 +78,36 @@ class OfficeView(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return Office.objects.all()
+
+
+class ReservationView(viewsets.ModelViewSet):
+    """
+    Gets and creates reservation data.
+    """
+
+    serializer_class = serializers.ReservationSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def get_object(self):
+        reservation_id = self.kwargs['reservation_id']
+        return get_object_or_404(Reservation, id=reservation_id)
+
+    def get_queryset(self):
+        office_id = self.kwargs['office_id']
+        return Reservation.objects.filter(office=office_id)
+
+    def perform_create(self, serializer):
+        office = serializer.validated_data.get('office')
+        current_reservations = Reservation.objects.filter(
+            profile=self.request.user, office=office)
+
+        instance_start = serializer.validated_data.get('start')
+        instance_end = serializer.validated_data.get('end')
+
+        for reservation in current_reservations:
+            if reservation.start <= instance_start <= reservation.end or \
+                    reservation.start <= instance_end <= reservation.end:
+                raise BadOperation(
+                    detail='This reservation has intersects with current reservations')
+
+        serializer.save(profile=self.request.user)
