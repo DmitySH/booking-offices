@@ -2,6 +2,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework import viewsets
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.response import Response
 
 from src.main import serializers
 from src.main.exceptions import IncorrectMethod
@@ -29,10 +30,23 @@ class OfficeReviewView(viewsets.ModelViewSet):
                 detail='Use PUT method to edit existing review')
         serializer.save(profile=self.request.user)
 
-    def perform_update(self, serializer):
-        # Ignore office to update, because it was defined in URL.
-        serializer.validated_data.pop('office')
-        serializer.save()
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        serializer = self.get_serializer(data=request.data)
+
+        serializer.is_valid(raise_exception=True)
+        office = serializer.validated_data['office']
+
+        instance = get_object_or_404(OfficeReview, profile=request.user,
+                                     office=office)
+        serializer.instance = instance
+        serializer.partial = partial
+        self.perform_update(serializer)
+
+        if getattr(instance, '_prefetched_objects_cache', None):
+            instance._prefetched_objects_cache = {}
+
+        return Response(serializer.data)
 
 
 class OfficePhotoView(viewsets.ModelViewSet):

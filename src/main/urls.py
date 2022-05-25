@@ -16,10 +16,10 @@ urlpatterns = [
     path('office/photos/<int:photo_id>/',
          views.OfficePhotoView.as_view({'delete': 'destroy'})),
     path('office/review/',
-         views.OfficeReviewView.as_view({'post': 'create'})),
+         views.OfficeReviewView.as_view({'post': 'create', 'put': 'update'})),
     path('office/<int:office_id>/reviews/',
          views.OfficeReviewView.as_view({'get': 'list'})),
     path('office/reviews/<int:review_id>/',
          views.OfficeReviewView.as_view(
-             {'delete': 'destroy', 'put': 'update'})),
+             {'delete': 'destroy'})),
 ]
