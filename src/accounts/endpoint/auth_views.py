@@ -35,7 +35,14 @@ class TokenAuthView(generics.GenericAPIView):
 
 
 class ActivateUser(UserViewSet):
+    """
+    Activates user account.
+    """
+
     def get_serializer(self, *args, **kwargs):
+        if getattr(self, 'swagger_fake_view', False):
+            return None
+
         serializer_class = self.get_serializer_class()
         kwargs.setdefault('context', self.get_serializer_context())
 

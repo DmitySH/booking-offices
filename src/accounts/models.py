@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User, AbstractUser
 from django.db import models
 
+import src.general.models as general_models
 from src.accounts.managers import ProfileManager
 
 
@@ -26,16 +27,21 @@ class Profile(AbstractUser):
 
     join_date = models.DateTimeField(verbose_name='Дата регистрации',
                                      auto_now_add=True)
-    country = models.CharField(verbose_name='Страна', max_length=30,
-                               blank=True, default='')
-    city = models.CharField(verbose_name='Город', max_length=30,
-                            blank=True, default='')
+    country = models.ForeignKey(general_models.Country,
+                                on_delete=models.CASCADE,
+                                verbose_name='Страна',
+                                related_name='profiles',
+                                null=True)
+    city = models.ForeignKey(general_models.City,
+                             on_delete=models.CASCADE,
+                             verbose_name='Город',
+                             related_name='profiles',
+                             null=True)
     biography = models.TextField(verbose_name='Биография',
                                  max_length=2000, blank=True, default='')
-
-    @property
-    def is_authenticated(self):
-        return True
+    photo = models.ImageField('Фотография',
+                              upload_to='profile-office-photos/',
+                              null=True, blank=True)
 
     def __str__(self):
         return self.email
